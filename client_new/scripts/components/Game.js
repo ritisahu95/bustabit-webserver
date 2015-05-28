@@ -26,13 +26,16 @@ define([
 
     var D = React.DOM;
 
+    var SIZE_TRIGGER = 1000;
+
     return React.createClass({
         displayName: 'Game',
 
         getInitialState: function () {
             return {
                 isConnected: Engine.isConnected,
-                showMessage: true
+                showMessage: true,
+                smallWindow: window.innerWidth < SIZE_TRIGGER
             }
         },
 
@@ -41,6 +44,11 @@ define([
                 'connected': this._onChange,
                 'disconnected': this._onChange
             });
+
+            window.addEventListener("resize", function() {
+                console.log(window.innerWidth)
+            });
+
         },
 
         componentWillUnmount: function() {
@@ -115,13 +123,20 @@ define([
                 containerClass = '';
             }
 
+            console.log('small window: ', this.state.smallWindow)
+
+            var rightContainer = !this.state.smallWindow?
+                D.div({ id: 'game-right-container' },
+                    Players(),
+                    BetBar()
+                ) : null;
 
             return D.div({ id: 'game-inner-container' },
 
                 messageContainer,
 
                 D.div({ id: 'game-playable-container', className: containerClass },
-                    D.div({ id: 'game-left-container' },
+                    D.div({ id: 'game-left-container', className: this.state.smallWindow? ' small-window' : '' },
                         D.div({ id: 'chart-controls-row' },
                             D.div({ id: 'chart-controls-col' },
                                 ChartControls()
@@ -135,34 +150,10 @@ define([
                         )
 
                     ),
-                    D.div({ id: 'game-right-container' },
-                        Players(),
-                        BetBar()
-                    )
+                    rightContainer
                 )
 
             );
-
-            //return D.div({ className: 'content' },
-            //    D.div({ className: 'grid grid-pad' },
-            //        D.div({ className: 'col-7-12 game' },
-            //            Chart(),
-            //            Controls()
-            //        ),
-            //        D.div({ className: 'col-5-12 tabs' },
-            //            D.div({ className: 'players' },
-            //                Players()
-            //            ),
-            //            D.div({ className: 'bet-bar' },
-            //                BetBar()
-            //            ),
-            //            D.div({ className: 'log-chat' },
-            //                TabsSelector()
-            //            )
-            //        )
-            //
-            //    )
-            //)
         }
     });
 

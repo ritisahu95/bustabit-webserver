@@ -157,8 +157,9 @@ define([
             /** Control Inputs: Bet & AutoCash@  **/
             var controlInputs = [];
             controlInputs.push(D.div({ className: 'bet-container col-1-1' , key: 'ci-1' },
-                D.span({ className: '' }, 'Bet'),
+
                 D.div({ className: 'bet-input-group' + (this.state.betInvalid? ' error' : '') },
+                    D.span({ className: '' }, 'Bet'),
                     D.input({
                         type: 'text',
                         name: 'bet-size',
@@ -171,8 +172,9 @@ define([
                 )
             ));
             controlInputs.push(D.div({ className: 'autocash-container col-1-1', key: 'ci-2' },
-                D.span({ className: '' }, 'Auto Cash Out'),
+
                 D.div({ className: 'bet-input-group' + (this.state.cashOutInvalid? ' error' : '') },
+                    D.span({ className: '' }, 'Auto Cash Out'),
                     D.input({
                         min: 1,
                         step: 0.01,
