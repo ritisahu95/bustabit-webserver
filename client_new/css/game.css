@@ -90,6 +90,11 @@ i {
     right: 0;
     left: 0;
 }
+@media handheld, only screen and (max-width: 767px) {
+    .page-content {
+        top: 0;
+    }
+}
 
 /* Overwrite the native focus outline */
 input:focus {
@@ -99,6 +104,32 @@ input:focus {
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
 }
 
+
+@media handheld, only screen and (max-width: 767px) {
+    #handheld-detection {
+        display: none;
+    }
+}
+
+
+/* ==========================================================================
+   Header Overwrite
+   ========================================================================== */
+
+@media handheld, only screen and (max-width: 767px) {
+    .nav-top-bar {
+        border-bottom: none;
+        z-index: 999999;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+
+    .nav-top-bar .username a {
+        font-weight: bold;
+    }
+}
 
 
 /* ==========================================================================
@@ -202,6 +233,7 @@ input:focus {
     border-right: 1px solid #ddd;
 }
 
+
 /* ==========================================================================
    Tabs container
    ========================================================================== */
@@ -211,8 +243,6 @@ input:focus {
     border-top: 1px solid #ddd;
     display: table-row;
 }
-
-
 
 
 /* ==========================================================================
@@ -310,6 +340,7 @@ input:focus {
     max-width: 3rem;
 }
 
+
 /* Playing/Lost/Cashed/Won Colors
    ========================================================================== */
 
@@ -352,5 +383,3 @@ tr.user-cashed.me {
     /*color: black;*/
     /*margin-bottom: 1em;*/
 /*}*/
-
-

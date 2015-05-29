@@ -6,18 +6,20 @@
  */
 define([
     'lib/react',
-    'components/Chart-Controls',
+    'components/ChartControls',
     'components/TabsSelector',
     'components/Players',
     'components/BetBar',
-    'game-logic/engine'
+    'game-logic/engine',
+    'lib/clib'
 ], function(
     React,
     ChartControlsClass,
     TabsSelectorClass,
     PlayersClass,
     BetBarClass,
-    Engine
+    Engine,
+    Clib
 ){
     var ChartControls = React.createFactory(ChartControlsClass);
     var TabsSelector = React.createFactory(TabsSelectorClass);
@@ -26,8 +28,6 @@ define([
 
     var D = React.DOM;
 
-    var SIZE_TRIGGER = 1000;
-
     return React.createClass({
         displayName: 'Game',
 
@@ -35,7 +35,7 @@ define([
             return {
                 isConnected: Engine.isConnected,
                 showMessage: true,
-                smallWindow: window.innerWidth < SIZE_TRIGGER
+                isMobileOrSmall: Clib.isMobileOrSmall()
             }
         },
 
@@ -45,10 +45,7 @@ define([
                 'disconnected': this._onChange
             });
 
-            window.addEventListener("resize", function() {
-                console.log(window.innerWidth)
-            });
-
+            window.addEventListener("resize", this._onWindowResize);
         },
 
         componentWillUnmount: function() {
@@ -61,6 +58,12 @@ define([
         _onChange: function() {
             if(this.state.isConnected != Engine.isConnected)
                 this.setState({ isConnected: Engine.isConnected });
+        },
+
+        _onWindowResize: function() {
+            var isMobileOrSmall = Clib.isMobileOrSmall();
+            if(this.state.isMobileOrSmall !== isMobileOrSmall)
+                this.setState({ isMobileOrSmall: isMobileOrSmall });
         },
 
         _hideMessage: function() {
@@ -123,9 +126,7 @@ define([
                 containerClass = '';
             }
 
-            console.log('small window: ', this.state.smallWindow)
-
-            var rightContainer = !this.state.smallWindow?
+            var rightContainer = !this.state.isMobileOrSmall?
                 D.div({ id: 'game-right-container' },
                     Players(),
                     BetBar()
@@ -136,10 +137,12 @@ define([
                 messageContainer,
 
                 D.div({ id: 'game-playable-container', className: containerClass },
-                    D.div({ id: 'game-left-container', className: this.state.smallWindow? ' small-window' : '' },
+                    D.div({ id: 'game-left-container', className: this.state.isMobileOrSmall? ' small-window' : '' },
                         D.div({ id: 'chart-controls-row' },
                             D.div({ id: 'chart-controls-col' },
-                                ChartControls()
+                                ChartControls({
+                                    isMobileOrSmall: this.state.isMobileOrSmall
+                                })
                             )
 
                         ),
