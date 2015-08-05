@@ -622,9 +622,9 @@ exports.getLeaderBoard = function(byDb, order, callback) {
     });
 };
 
-exports.addChatMessage = function(userId, created, message, channelName, isBot, callback) {
-    var sql = 'INSERT INTO chat_messages (user_id, created, message, channel, is_bot) values($1, $2, $3, $4, $5)';
-    query(sql, [userId, created, message, channelName, isBot], function(err, res) {
+exports.addChatMessage = function(userId, created, message, type, channelName, isBot, callback) {
+    var sql = 'INSERT INTO chat_messages (user_id, created, message, type, channel, is_bot) values($1, $2, $3, $4, $5, $6)';
+    query(sql, [userId, created, message, type, channelName, isBot], function(err, res) {
         if(err)
             return callback(err);
 
@@ -636,7 +636,7 @@ exports.addChatMessage = function(userId, created, message, channelName, isBot, 
 
 exports.getChatTable = function(limit, channelName, callback) {
     assert(typeof limit === 'number');
-    var sql = "SELECT chat_messages.created AS time, 'say' AS type, users.username, users.userclass AS role, chat_messages.message, is_bot AS bot " +
+    var sql = "SELECT chat_messages.created AS date, type, users.username, users.userclass AS role, chat_messages.message, is_bot AS bot " +
         "FROM chat_messages JOIN users ON users.id = chat_messages.user_id WHERE channel = $1 ORDER BY chat_messages.id DESC LIMIT $2";
     query(sql, [channelName, limit], function(err, data) {
         if(err)

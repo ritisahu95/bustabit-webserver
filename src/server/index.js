@@ -179,6 +179,7 @@ io.use(function(socket, next) {
     debug('incoming socket connection');
 
     var sessionId = (socket.request.headers.cookie)? socket.request.headers.cookie.id : null;
+    console.log(socket.request.headers.cookie);
 
     //If no session id or wrong the user is a guest
     if(!sessionId || !lib.isUUIDv4(sessionId)) {
